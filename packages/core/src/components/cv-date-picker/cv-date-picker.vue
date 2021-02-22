@@ -21,7 +21,11 @@
         }"
         @change="onChange"
       >
-        <label v-if="getDateLabel.length > 0" :for="`${uid}-input-1`" :class="`${carbonPrefix}--label`">
+        <label
+          v-if="getDateLabel.length > 0"
+          :for="`${uid}-input-1`"
+          :class="[`${carbonPrefix}--label`, { [`${carbonPrefix}--label--disabled`]: disabled }]"
+        >
           {{ getDateLabel }}
         </label>
         <div :class="`${carbonPrefix}--date-picker-input__wrapper`">
@@ -30,6 +34,7 @@
             type="text"
             :id="`${uid}-input-1`"
             :class="`${carbonPrefix}--date-picker__input`"
+            :disabled="disabled"
             :pattern="pattern"
             :placeholder="placeholder"
             data-date-picker-input
@@ -56,6 +61,7 @@
             type="text"
             :id="`${uid}-input-2`"
             :class="`${carbonPrefix}--date-picker__input`"
+            :disabled="disabled"
             :pattern="pattern"
             :placeholder="placeholder"
             data-date-picker-input
@@ -136,6 +142,7 @@ export default {
     },
     invalidMessage: { type: String, default: undefined },
     value: [String, Object, Array, Date],
+    disabled: Boolean,
   },
   model: {
     prop: 'value',
@@ -167,6 +174,11 @@ export default {
     },
     invalidMessage() {
       this.checkSlots();
+    },
+    disabled() {
+      if (this.disabled) {
+        this.cal.close();
+      }
     },
   },
   computed: {
